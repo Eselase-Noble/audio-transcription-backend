@@ -37,6 +37,9 @@ import anthropic
 from openai import OpenAI
 import whisper
 from docx2pdf import convert as docx2pdf_convert
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from fastapi import Request
 
 # Configure logging
 logging.basicConfig(
@@ -112,6 +115,9 @@ app = FastAPI(
         "url": "https://opensource.org/licenses/MIT",
     }
 )
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
 
 # CORS middleware
 app.add_middleware(
@@ -829,8 +835,9 @@ async def cleanup_files(background_tasks: BackgroundTasks):
 
 
 @app.post("/api/transcribe")
-#@limiter.limit("2/minute")
+@limiter.limit("2/minute")
 async def transcribe_meeting(
+    request: Request,
     background_tasks: BackgroundTasks,
     audio: UploadFile = File(...),
     title: str = Form("Meeting Transcription"),
@@ -851,6 +858,9 @@ async def transcribe_meeting(
     - **include_action_items**: Extract action items from meeting
     - **confidentiality_level**: Document classification (Internal/Confidential/Public)
     """
+
+    client_ip = request.client.host
+    logger.info(f"Received request from IP: {client_ip}")
 
     temp_audio_path = None
     output_file_path = None
