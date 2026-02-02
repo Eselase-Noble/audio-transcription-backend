@@ -770,7 +770,7 @@ def convert_docx_to_pdf_linux(docx_path: Path, pdf_path: Path):
     """Convert DOCX to PDF using LibreOffice (Linux-compatible)."""
     try:
         subprocess.run([
-            "libreoffice",
+            "/usr/bin/libreoffice",
             "--headless",
             "--convert-to", "pdf",
             "--outdir", str(pdf_path.parent),
