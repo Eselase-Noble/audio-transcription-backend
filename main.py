@@ -23,6 +23,7 @@ from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTa
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from limiter import Limiter
 from openai.types.chat import ChatCompletionSystemMessageParam, ChatCompletionUserMessageParam
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
@@ -120,6 +121,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Mount static files
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
@@ -770,7 +772,7 @@ def convert_docx_to_pdf_linux(docx_path: Path, pdf_path: Path):
     """Convert DOCX to PDF using LibreOffice (Linux-compatible)."""
     try:
         subprocess.run([
-            "/usr/bin/libreoffice",
+            "libreoffice",
             "--headless",
             "--convert-to", "pdf",
             "--outdir", str(pdf_path.parent),
@@ -827,6 +829,7 @@ async def cleanup_files(background_tasks: BackgroundTasks):
 
 
 @app.post("/api/transcribe")
+#@limiter.limit("2/minute")
 async def transcribe_meeting(
     background_tasks: BackgroundTasks,
     audio: UploadFile = File(...),
