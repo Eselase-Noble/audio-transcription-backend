@@ -7,6 +7,7 @@ charset-normalizer==3.4.4
 click==8.3.1
 cuda-bindings==12.9.4
 cuda-pathfinder==1.3.3
+Deprecated==1.3.1
 distro==1.9.0
 docstring_parser==0.17.0
 docx2pdf==0.1.8
@@ -22,6 +23,8 @@ huggingface_hub==1.3.5
 idna==3.11
 Jinja2==3.1.6
 jiter==0.12.0
+limiter==0.5.0
+limits==5.6.0
 llvmlite==0.46.0
 lxml==6.0.2
 MarkupSafe==3.0.3
@@ -58,10 +61,13 @@ regex==2026.1.15
 requests==2.32.5
 setuptools==80.10.2
 shellingham==1.5.4
+slowapi==0.1.9
 sniffio==1.3.1
 starlette==0.50.0
+StrEnum==0.4.15
 sympy==1.14.0
 tiktoken==0.12.0
+token-bucket==0.3.0
 tokenizers==0.22.2
 torch==2.10.0
 tqdm==4.67.2
@@ -74,3 +80,4 @@ uvicorn==0.40.0
 uvloop==0.22.1
 watchfiles==1.1.1
 websockets==16.0
+wrapt==2.1.0
